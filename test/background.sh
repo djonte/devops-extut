@@ -14,7 +14,7 @@ setup_failed() {
 
 trap setup_failed ERR
 
-if ! command -v checkov >/dev/null 2>&1; then
+if ! checkov --version 2>/dev/null | grep --quiet --fixed-strings "${CHECKOV_VERSION}"; then
   curl --fail --location --silent --show-error "${CHECKOV_URL}" --output "${CHECKOV_ARCHIVE}"
   echo "${CHECKOV_SHA256}  ${CHECKOV_ARCHIVE}" | sha256sum --check --status
   mkdir -p "${CHECKOV_DIRECTORY}"
