@@ -1,9 +1,11 @@
 {
-  "title": "Hello World",
-  "description": "My first Killercoda scenario",
+  "title": "Container Security with Checkov",
+  "description": "Find, understand and fix Dockerfile security misconfigurations",
   "details": {
     "intro": {
-      "text": "intro.md"
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
     },
     "steps": [
       {
@@ -13,6 +15,24 @@
     ],
     "finish": {
       "text": "finish.md"
+    },
+    "assets": {
+      "host01": [
+        {
+          "file": "app.py",
+          "target": "/root/tutorial",
+          "chmod": "+w"
+        },
+        {
+          "file": "Dockerfile",
+          "target": "/root/tutorial",
+          "chmod": "+w"
+        },
+        {
+          "file": "Dockerfile.solution",
+          "target": "/opt/tutorial-solution"
+        }
+      ]
     }
   },
   "backend": {
