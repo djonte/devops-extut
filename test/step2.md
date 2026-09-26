@@ -44,13 +44,13 @@ Docker reports `no-healthcheck` and `true`. It knows that the process is running
 
 ## Mutable base-image tag
 
-Inspect the exact image digest that `python:latest` resolved to during this build:
+Inspect the digest that `python:latest` currently resolves to:
 
 ```bash
-docker image inspect python:latest --format '{{index .RepoDigests 0}}'
+docker buildx imagetools inspect python:latest | head -n 4
 ```
 
-The digest identifies the image content downloaded today. The `latest` tag can point to different content in a future build, which makes builds less predictable. An explicit version tag is better for this tutorial. A digest is stronger when exact image immutability is required.
+The top-level digest should match the digest shown next to `python:latest` in the earlier build output. It identifies the image content available today. The `latest` tag can point to different content in a future build, which makes builds less predictable. An explicit version tag is better for this tutorial. A digest is stronger when exact image immutability is required.
 
 Remove the insecure container before continuing:
 
