@@ -9,8 +9,24 @@
     },
     "steps": [
       {
-        "title": "Run Hello World",
+        "title": "Scan the Dockerfile",
         "text": "step1.md"
+      },
+      {
+        "title": "Investigate the problems",
+        "text": "step2.md"
+      },
+      {
+        "title": "Fix the Dockerfile",
+        "text": "step3.md"
+      },
+      {
+        "title": "Scan and rebuild",
+        "text": "step4.md"
+      },
+      {
+        "title": "Verify the fixed container",
+        "text": "step5.md"
       }
     ],
     "finish": {
