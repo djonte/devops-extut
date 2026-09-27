@@ -2,7 +2,7 @@
 
 This repository contains a Killercoda tutorial about Dockerfile security. The tutorial uses Checkov to find three problems and Docker to show why the problems matter at runtime.
 
-The scenario is in [`test/`](test/).
+The scenario is in [`container-security-checkov/`](container-security-checkov/).
 
 ## Tutorial flow
 

@@ -4,29 +4,29 @@
   "details": {
     "intro": {
       "text": "intro.md",
-      "background": "background.sh",
-      "foreground": "foreground.sh"
+      "background": "setup/background.sh",
+      "foreground": "setup/foreground.sh"
     },
     "steps": [
       {
         "title": "Scan the Dockerfile",
-        "text": "step1.md"
+        "text": "steps/01-scan.md"
       },
       {
         "title": "Investigate the problems",
-        "text": "step2.md"
+        "text": "steps/02-investigate.md"
       },
       {
         "title": "Fix the Dockerfile",
-        "text": "step3.md"
+        "text": "steps/03-fix.md"
       },
       {
         "title": "Scan and rebuild",
-        "text": "step4.md"
+        "text": "steps/04-rescan.md"
       },
       {
         "title": "Verify the fixed container",
-        "text": "step5.md"
+        "text": "steps/05-verify.md"
       }
     ],
     "finish": {
