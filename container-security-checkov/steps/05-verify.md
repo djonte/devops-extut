@@ -10,10 +10,23 @@ Verify that the application responds and does not run as root:
 
 ```bash
 curl --fail http://localhost:8000/health
-docker exec checkov-tutorial id -u
+docker exec checkov-tutorial id
+docker exec checkov-tutorial ls -l /app/app.py
 ```
 
-The user ID should be different from `0`.
+The output should include `uid=10001(appuser)`, and `app.py` should be owned by `appuser`.
+
+Try the same write that succeeded in the insecure container:
+
+```bash
+if docker exec checkov-tutorial touch /root/permission-test; then
+  echo "Unexpected: appuser wrote to /root"
+else
+  echo "Expected: appuser cannot write to /root"
+fi
+```
+
+This time Docker should report `Permission denied`, followed by the expected message. The application still works, but the process no longer has root's permissions inside the container.
 
 Docker may first report `starting`. Wait until the health check succeeds:
 
