@@ -13,10 +13,16 @@ docker run -d --name checkov-tutorial -p 8000:8000 checkov-tutorial:insecure
 Check the user ID of the running process:
 
 ```bash
-docker exec checkov-tutorial id -u
+docker exec checkov-tutorial id
 ```
 
-The result is `0`, which means the process runs as root. If an attacker takes control of the application, root gives them more permissions inside the container than they need.
+The result includes `uid=0(root)`, which means the process runs as root. Confirm that it can write inside the root user's home directory:
+
+```bash
+docker exec checkov-tutorial sh -c 'touch /root/permission-test && ls -l /root/permission-test'
+```
+
+The command succeeds because the container process has root privileges. If an attacker takes control of the application, root gives them more permissions inside the container than they need. Container root is isolated from the host by default, but using fewer privileges still reduces what a compromised process can change inside the container.
 
 ## Missing health check
 
