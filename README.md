@@ -13,3 +13,4 @@ The scenario is in [`container-security-checkov/`](container-security-checkov/).
 5. Verify the non-root user and Docker health status.
 
 Checkov is pinned to version `3.3.8` in the scenario setup.
+
