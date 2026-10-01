@@ -56,3 +56,5 @@ Clean up the practice container:
 ```bash
 docker rm -f checkov-tutorial
 ```
+
+Click **Check** to run the final automatic verification. It rebuilds your Dockerfile and checks the Checkov policies, non-root permissions, application response, and Docker health status.

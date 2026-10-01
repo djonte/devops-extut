@@ -26,7 +26,8 @@
       },
       {
         "title": "Verify the fixed container",
-        "text": "steps/05-verify.md"
+        "text": "steps/05-verify.md",
+        "verify": "verification/final.sh"
       }
     ],
     "finish": {
