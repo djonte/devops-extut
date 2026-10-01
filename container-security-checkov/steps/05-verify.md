@@ -51,10 +51,4 @@ docker inspect --format 'running={{.State.Running}} health={{.State.Health.Statu
 
 Docker should report `running=true health=unhealthy`. The process is still running, but Docker can now detect that the application is not healthy.
 
-Clean up the practice container:
-
-```bash
-docker rm -f checkov-tutorial
-```
-
-Click **Check** to run the final automatic verification. It rebuilds your Dockerfile and checks the Checkov policies, non-root permissions, application response, and Docker health status.
+Leave the container running and click **Check**. The automatic verifier checks the Dockerfile and the final container state, then removes the practice container after verification succeeds.
