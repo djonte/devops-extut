@@ -12,6 +12,8 @@ The starter Dockerfile has three problems:
 
 This tutorial connects infrastructure as code, automated feedback, and runtime verification. Tracking the Dockerfile in Git allows teammates to review configuration changes before they are merged. Adding Checkov automates part of that review and finds potential security issues, such as a missing non-root user.
 
+Not every finding is a direct security vulnerability: the mutable tag affects reproducibility, while the missing health check affects reliability and failure detection.
+
 Running these checks after each change helps catch problems early. In a CI pipeline, a failed check can stop a change from progressing toward deployment until the problem is addressed.
 
 ## Learning outcomes
