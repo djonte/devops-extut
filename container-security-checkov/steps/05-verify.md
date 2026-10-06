@@ -14,7 +14,7 @@ docker exec checkov-tutorial id
 docker exec checkov-tutorial ls -l /app/app.py
 ```
 
-The output should include `uid=10001(appuser)`, and `app.py` should be owned by `appuser`.
+The output should show a non-zero user ID for `appuser`, and `app.py` should be owned by `appuser`. The exact user ID may differ between valid solutions.
 
 Try the same write that succeeded in the insecure container:
 
@@ -51,4 +51,25 @@ docker inspect --format 'running={{.State.Running}} health={{.State.Health.Statu
 
 Docker should report `running=true health=unhealthy`. The process is still running, but Docker can now detect that the application is not healthy.
 
-Leave the container running and click **Check**. The automatic verifier checks the Dockerfile and the final container state, then removes the practice container after verification succeeds.
+If a waiting loop does not reach the expected state, inspect the container and the health-check output:
+
+```bash
+docker ps -a
+docker logs checkov-tutorial
+docker inspect --format '{{json .State.Health}}' checkov-tutorial
+```
+
+Remove the failure flag and wait for the next successful health check:
+
+```bash
+docker exec checkov-tutorial rm /tmp/app-unhealthy
+for attempt in {1..20}; do
+  [ "$(docker inspect --format '{{.State.Health.Status}}' checkov-tutorial)" = "healthy" ] && break
+  sleep 1
+done
+docker inspect --format 'running={{.State.Running}} health={{.State.Health.Status}}' checkov-tutorial
+```
+
+Docker should report `running=true health=healthy`. The health check detects the application's condition; it does not cause the recovery. The application recovered because you removed the flag that made its endpoint fail.
+
+Leave the container running and click **Check**. The automatic verifier checks the Dockerfile, non-root permissions, and the healthy-to-unhealthy-to-healthy transition. It removes the practice container after verification succeeds.

@@ -1,6 +1,6 @@
 # Fix the Dockerfile
 
-Open the Dockerfile in an editor:
+Open the **Editor** tab in Killercoda and select `/root/tutorial/Dockerfile`. You can also edit it in the terminal:
 
 ```bash
 nano /root/tutorial/Dockerfile
@@ -8,11 +8,31 @@ nano /root/tutorial/Dockerfile
 
 Make these changes:
 
-1. Replace `python:latest` with the tested `python:3.13-slim` image.
-2. Create a dedicated user named `appuser`.
-3. Copy the application with ownership set to `appuser`.
-4. Set `USER appuser` before the container starts.
-5. Add a health check that requests `http://127.0.0.1:8000/health`.
+1. Replace `python:latest` with the tested `python:3.13-slim` image. This removes the mutable `latest` tag:
+
+   ```dockerfile
+   FROM python:3.13-slim
+   ```
+
+2. Create a dedicated user after `FROM`. The application does not need root privileges:
+
+   ```dockerfile
+   RUN useradd --create-home appuser
+   ```
+
+3. Keep `WORKDIR /app`, then copy the application with ownership set to `appuser`:
+
+   ```dockerfile
+   COPY --chown=appuser:appuser app.py .
+   ```
+
+4. Set the runtime user before `CMD` so the application starts as `appuser`:
+
+   ```dockerfile
+   USER appuser
+   ```
+
+5. Add a health check before `CMD` that requests `http://127.0.0.1:8000/health`.
 
 Your health check can use Python, which is already available in the image:
 

@@ -2,11 +2,17 @@
 
 In this tutorial, you will find and fix security misconfigurations in a Dockerfile. You will use Checkov for static analysis and Docker to verify the result at runtime.
 
+## Prerequisites
+
+You should be comfortable running terminal commands and know that a Dockerfile describes how an image is built. Basic familiarity with instructions such as `FROM`, `RUN`, `COPY`, `USER` and `CMD` is helpful. The fix step explains the security-related changes, so advanced Docker knowledge is not required.
+
 The starter Dockerfile has three problems:
 
 - The application runs as root.
 - The base image uses the mutable `latest` tag.
 - The image has no health check.
+
+This is a focused exercise that runs three selected Checkov policies. It is not a complete container security assessment.
 
 ## DevOps relevance
 
@@ -42,7 +48,7 @@ Checkov reads the Dockerfile without building or running it. Docker uses the Doc
 
 ### Design decisions
 
-- **Checkov for static checks:** Checkov detects configuration problems before the application runs. We selected three checks to connect each finding to a concrete change.
+- **Checkov for static checks:** Checkov is free, provides named policies with clear findings, and can run locally or in CI across several infrastructure-as-code formats. Hadolint focuses specifically on Dockerfile linting, while tools such as Trivy also cover broader vulnerability scanning. We use Checkov here to keep the tutorial focused on configuration policies. We selected three checks to connect each finding to a concrete change.
 - **Small Python application:** We use a simple Python application to keep setup simple and focus on container configuration. The same Python runtime performs the health check, so no extra tool is needed.
 - **Non-root user:** This application does not need root privileges. Restricting its permissions follows the basic security principle of least privilege.
 - **Explicit base-image version:** A version tag makes the intended runtime clearer than `latest`. Tags can still change, so a digest is more appropriate when exact image immutability is required.

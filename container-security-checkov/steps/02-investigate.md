@@ -56,7 +56,28 @@ Inspect the digest that `python:latest` currently resolves to:
 docker buildx imagetools inspect python:latest | head -n 4
 ```
 
-The top-level digest should match the digest shown next to `python:latest` in the earlier build output. It identifies the image content available today. The `latest` tag can point to different content in a future build, which makes builds less predictable. An explicit version tag is better for this tutorial. A digest is stronger when exact image immutability is required.
+Look for output similar to this:
+
+```text
+Name:      docker.io/library/python:latest
+MediaType: application/vnd.oci.image.index.v1+json
+Digest:    sha256:...
+```
+
+The value after `Digest:` should match the digest shown next to `python:latest` in the earlier build output, for example:
+
+```text
+FROM docker.io/library/python:latest@sha256:...
+```
+
+The digest identifies the image content available now. The tag can resolve to different content later even when the Dockerfile has not changed:
+
+```text
+Monday: python:latest -> sha256:aaa...
+Friday: python:latest -> sha256:bbb...
+```
+
+This example is illustrative; the real tag does not need to change during the tutorial. An explicit version tag is more predictable than `latest`. A digest is stronger when exact image immutability is required.
 
 Remove the insecure container before continuing:
 
