@@ -72,4 +72,4 @@ docker inspect --format 'running={{.State.Running}} health={{.State.Health.Statu
 
 Docker should report `running=true health=healthy`. The health check detects the application's condition; it does not cause the recovery. The application recovered because you removed the flag that made its endpoint fail.
 
-Leave the container running and click **Check**. The automatic verifier checks the Dockerfile, non-root permissions, and the healthy-to-unhealthy-to-healthy transition. It removes the practice container after verification succeeds.
+Leave the recovered container running and click **Check**. The automatic verifier checks the Dockerfile, non-root permissions, application response, and final healthy state. It removes the practice container after verification succeeds.

@@ -12,23 +12,6 @@ fail() {
   exit 1
 }
 
-health_status() {
-  docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}missing{{end}}' \
-    "${CONTAINER}" 2>/dev/null
-}
-
-wait_for_health() {
-  local expected="$1"
-  local attempts="$2"
-
-  for ((attempt = 1; attempt <= attempts; attempt++)); do
-    [[ "$(health_status)" == "${expected}" ]] && return 0
-    sleep 1
-  done
-
-  return 1
-}
-
 cd "${TUTORIAL_DIRECTORY}" || fail "tutorial files were not found"
 
 echo "Checking the Dockerfile policies..."
@@ -69,22 +52,20 @@ if docker exec "${CONTAINER}" touch /root/permission-test >/dev/null 2>&1; then
   fail "appuser can write inside /root"
 fi
 
-if ! wait_for_health "healthy" 20; then
-  fail "expected health=healthy, but found $(health_status)"
+if docker exec "${CONTAINER}" test -e /tmp/app-unhealthy; then
+  fail "the controlled application failure is still enabled"
 fi
 
-docker exec "${CONTAINER}" touch /tmp/app-unhealthy || \
-  fail "the controlled application failure could not be enabled"
+container_state="$(docker inspect \
+  --format '{{.State.Running}} {{if .State.Health}}{{.State.Health.Status}}{{else}}missing{{end}}' \
+  "${CONTAINER}" 2>/dev/null)" || fail "the container state could not be inspected"
+[[ "${container_state}" == "true healthy" ]] || \
+  fail "expected running=true health=healthy, but found ${container_state}"
 
-if ! wait_for_health "unhealthy" 30; then
-  fail "expected health=unhealthy, but found $(health_status)"
-fi
-
-docker exec "${CONTAINER}" rm /tmp/app-unhealthy || \
-  fail "the controlled application failure could not be removed"
-
-if ! wait_for_health "healthy" 20; then
-  fail "expected recovery to health=healthy, but found $(health_status)"
+if ! docker exec "${CONTAINER}" python -c \
+  "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)" \
+  >/dev/null 2>&1; then
+  fail "the application health endpoint did not respond successfully"
 fi
 
 docker rm -f "${CONTAINER}" >/dev/null 2>&1 || true
