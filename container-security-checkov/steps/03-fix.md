@@ -8,7 +8,7 @@ nano /root/tutorial/Dockerfile
 
 Make these changes:
 
-1. Replace `python:latest` with the tested `python:3.13-slim` image. This removes the mutable `latest` tag:
+1. Replace `python:latest` with the tested `python:3.13-slim` tag to make the base-image choice more predictable. The `latest` tag can move to another Python release line, while `python:3.13-slim` constrains builds to the Python 3.13 slim line. The new tag is still mutable and may receive Python patch releases, operating-system updates or image rebuilds. Pinning by digest is required for exact immutability:
 
    ```dockerfile
    FROM python:3.13-slim
